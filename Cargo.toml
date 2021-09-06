@@ -1,0 +1,22 @@
+[package]
+name = "kodiak"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# Define command line usage in YAML format, used for two reasons:
+# 1. keeps source code clean
+# 2. supports multilingual command line
+# Clap version string according to Clap compatibility policy
+clap = { version = "~2.33.3", features = ["yaml"] }
+
+chrono = { version = "0.4.19", features = ["serde"] }
+
+serde = { version = "1.0.129", features = ["derive"] }
+serde_json = "1.0.67"
+
+typetag = "0.1.7"
+
+uuid = { version = "0.8.2", features = ["serde", "v4"] }

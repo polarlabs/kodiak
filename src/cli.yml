@@ -1,0 +1,87 @@
+name: set in main
+version: set in main
+about: Manages assets, tasks, pages and any arbitrary unit.
+
+# DeriveDisplayOrder: Displays the arguments and SubCommands in the help message in the order that they were declared in, and not alphabetically.
+# GlobalVersion: Specifies to use the version of the current command for all child SubCommands.
+# VersionlessSubcommands: Disables -V and --version for all SubCommands.
+# ArgRequiredElseHelp: Specifies that the help text should be displayed (and then exit gracefully), if no arguments are present at runtime.
+# SubcommandRequiredElseHelp: Specifies that the help text should be displayed (before exiting gracefully) if no SubCommands are present at runtime.
+settings:
+  - DeriveDisplayOrder
+  - GlobalVersion
+  - VersionlessSubcommands
+  - ArgRequiredElseHelp
+  - SubcommandRequiredElseHelp
+
+subcommands:
+  - create:
+      about: Creates a unit.
+      settings:
+        - ArgRequiredElseHelp
+        - DeriveDisplayOrder
+      args:
+        - NAME:
+            long: name
+            short: n
+            takes_value: true
+            help: Defines the name of the unit.
+            multiple: false
+            required: true
+        - UNIT_TYPE:
+            long: unittype
+            short: t
+            takes_value: true
+            possible_values: ["asset", "task", "user"]
+            help: Defines the type of the unit.
+            multiple: false
+            required: true
+  - read:
+      about: Reads a unit from database.
+      settings:
+        - ArgRequiredElseHelp
+        - DeriveDisplayOrder
+      args:
+        - KEY:
+            long: key
+            short: k
+            takes_value: true
+            help: Reads unit with specified key from database.
+            multiple: false
+            required: true
+  - update:
+      about: Updates a unit.
+      settings:
+        - ArgRequiredElseHelp
+        - DeriveDisplayOrder
+      args:
+        - KEY:
+            long: key
+            short: k
+            takes_value: true
+            help: Updates unit with specified key.
+            multiple: false
+            required: true
+  - delete:
+      about: Deletes a unit from database.
+      settings:
+        - ArgRequiredElseHelp
+        - DeriveDisplayOrder
+      args:
+        - KEY:
+            long: key
+            short: k
+            takes_value: true
+            help: Deletes unit with specified key.
+            multiple: false
+            required: true
+
+args:
+  - VERBOSE:
+      long: verbose
+      short: v
+      help: Sets the level of verbosity
+  - DEBUG:
+      long: debug
+      short: d
+      help: Print debug messages
