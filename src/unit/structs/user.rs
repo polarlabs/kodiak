@@ -28,6 +28,10 @@ impl CRUD for User {
         self.email = Some(email.to_string());
     }
 
+    fn update(&mut self) {
+        self.unit.update();
+    }
+
     fn key(&self) -> String {
         self.unit.key()
     }

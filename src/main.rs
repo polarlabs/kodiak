@@ -37,7 +37,9 @@ fn read<'a>(state: &'a HashMap<String, Box<dyn CRUD>>, key: &'a str) -> Option<&
 
 fn update<'a>(state: &'a mut HashMap<String, Box<dyn CRUD>>, key: &'a str) -> Option<&'a Box<dyn CRUD>> {
     if state.contains_key(key) {
-        Some(state.get_mut(key).unwrap())
+        let unit = state.get_mut(key).unwrap();
+        unit.update();
+        Some(unit)
     } else {
         None
     }

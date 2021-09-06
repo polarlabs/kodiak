@@ -31,7 +31,10 @@ impl CRUD for Task {
     fn create(&mut self, subject: &str) {
         println!("Create on {:?}", self);
         self.subject = Some(subject.to_string());
-        println!("Create on {:?}", self);
+    }
+
+    fn update(&mut self) {
+        self.unit.update();
     }
 
     fn key(&self) -> String {

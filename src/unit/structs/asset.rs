@@ -29,6 +29,10 @@ impl CRUD for Asset {
         println!("Create on {:?}", self);
     }
 
+    fn update(&mut self) {
+        self.unit.update();
+    }
+
     fn key(&self) -> String {
         self.unit.key()
     }

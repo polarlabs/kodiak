@@ -6,7 +6,7 @@ pub trait CRUD {
 
     fn read(&self) {}
 
-    fn update(&mut self) {}
+    fn update(&mut self);
 
     fn delete(&self) {}
 

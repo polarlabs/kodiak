@@ -27,6 +27,10 @@ impl Unit {
         }
     }
 
+    pub fn update(&mut self) {
+        self.updated = Some(Utc::now());
+    }
+
     pub fn key(&self) -> String {
         self.key.clone()
     }
