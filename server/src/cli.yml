@@ -1,0 +1,32 @@
+name: set in main
+version: set in main
+about: Manages assets, tasks, pages and any arbitrary unit.
+
+# DeriveDisplayOrder: Displays the arguments and SubCommands in the help message in the order that they were declared in, and not alphabetically.
+# GlobalVersion: Specifies to use the version of the current command for all child SubCommands.
+# VersionlessSubcommands: Disables -V and --version for all SubCommands.
+# ArgRequiredElseHelp: Specifies that the help text should be displayed (and then exit gracefully), if no arguments are present at runtime.
+# SubcommandRequiredElseHelp: Specifies that the help text should be displayed (before exiting gracefully) if no SubCommands are present at runtime.
+settings:
+  - DeriveDisplayOrder
+  - GlobalVersion
+  - VersionlessSubcommands
+  - ArgRequiredElseHelp
+
+args:
+  - PORT:
+      long: port
+      short: p
+      takes_value: true
+      help: Defines port to listen on.
+      multiple: false
+      required: false
+      default_value: "4000"
+  - VERBOSE:
+      long: verbose
+      short: v
+      help: Sets the level of verbosity
+  - DEBUG:
+      long: debug
+      short: d
+      help: Print debug messages
