@@ -24,6 +24,12 @@ For release 0.2.0:
 * Implement a web server to manage items via REST API
 * Update CLI to use REST API
 
+# Version Numbering Scheme
+
+In principal, Kodiak follows the Semantic Versioning Specification [(SemVer)](https://semver.org/). However, for the time being Kodiak does not meet all requirements of the specification, e.g. Kodiak 0.1.0 has no public API. Declaration of a public API is planned for 0.2.0.
+
+As long as version numbers are < 1.0, Kodiak's development might be jumpy including the data persistence layer. Each 0.x release will represent a major developement step towards a fully functional web application, including data, application and presentation layer.
+
 # Tools
 
 To create Kodiak, the following tools are in use:
