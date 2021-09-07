@@ -19,9 +19,20 @@ Version 0.1.0 is a Minimum Viable Product with a focus on data structures. It le
 
 # Roadmap and future Considerations
 
+Please be aware that the following roadmap is still Work in Progress and might be changed at any time.
+
+For release 0.4.0:
+
+* Implement Data Persistence layer
+* Supported databases: tbd
+
+For release 0.3.0:
+
+* Implement a simple Web Frontend delivered by Kodiak's web server
+ 
 For release 0.2.0:
 
-* Implement a web server to manage items via REST API
+* Implement a Web Server based on [ACTIX](https://actix.rs/) to manage items via REST API
 * Update CLI to use REST API
 
 # Version Numbering Scheme
