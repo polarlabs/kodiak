@@ -1,3 +1,5 @@
+mod views;
+
 use kodiak_core::io;
 use kodiak_core::unit;
 use kodiak_core::{create, read, update, delete};
@@ -39,6 +41,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         WebApp::new()
+            .configure(views::factory)
             .route("/", web::get().to(greet))
             .route("/{name}", web::get().to(greet))
     })
