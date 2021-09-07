@@ -10,7 +10,7 @@ pub struct Asset {
 }
 
 impl Asset {
-    pub fn new(name: Option<&str>) -> Self {
+    fn new(name: Option<&str>) -> Self {
         Asset {
             name: match name {
                 Some(name) => Some(name.to_string()),
@@ -23,10 +23,8 @@ impl Asset {
 
 #[typetag::serde]
 impl CRUD for Asset {
-    fn create(&mut self, name: &str) {
-        println!("Create on {:?}", self);
-        self.name = Some(name.to_string());
-        println!("Create on {:?}", self);
+    fn create(name: &str) -> Self {
+        Asset::new(Some(name))
     }
 
     fn update(&mut self) {

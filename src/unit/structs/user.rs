@@ -10,7 +10,7 @@ pub struct User {
 }
 
 impl User {
-    pub fn new(email: Option<&str>) -> Self {
+    fn new(email: Option<&str>) -> Self {
         User {
             email: match email {
                 Some(email) => Some(email.to_string()),
@@ -23,9 +23,8 @@ impl User {
 
 #[typetag::serde]
 impl CRUD for User {
-    fn create(&mut self, email: &str) {
-        println!("Create on {:?}", self);
-        self.email = Some(email.to_string());
+    fn create(email: &str) -> Self {
+        User::new(Some(email))
     }
 
     fn update(&mut self) {

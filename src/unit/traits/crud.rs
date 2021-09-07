@@ -2,7 +2,8 @@ use std::fmt::{Debug, Formatter};
 
 #[typetag::serde(tag = "type")]
 pub trait CRUD {
-    fn create(&mut self, name: &str);
+    fn create(identifier: &str) -> Self
+        where Self: Sized;
 
     fn read(&self) {}
 
@@ -12,7 +13,6 @@ pub trait CRUD {
 
     fn key(&self) -> String;
 }
-
 
 impl Debug for dyn CRUD {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

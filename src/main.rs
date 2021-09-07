@@ -20,10 +20,9 @@ use std::collections::HashMap;
 use std::ops::Deref;
 
 fn create<'a>(state: &'a mut HashMap<String, Box<dyn CRUD>>, unit_type: UnitType, name: &str) -> &'a Box<dyn CRUD> {
-    let mut t1 = factory(unit_type);
-    t1.create(name);
-    let key = t1.key();
-    state.insert(t1.key().clone(), t1);
+    let unit = factory(unit_type, name);
+    let key = unit.key();
+    state.insert(key.clone(), unit);
     state.get(key.as_str()).unwrap()
 }
 

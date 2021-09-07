@@ -11,7 +11,7 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(subject: Option<&str>, status: Option<&str>) -> Self {
+    fn new(subject: Option<&str>, status: Option<&str>) -> Self {
         Task {
             subject: match subject {
                 Some(subject) => Some(subject.to_string()),
@@ -28,9 +28,8 @@ impl Task {
 
 #[typetag::serde]
 impl CRUD for Task {
-    fn create(&mut self, subject: &str) {
-        println!("Create on {:?}", self);
-        self.subject = Some(subject.to_string());
+    fn create(subject: &str) -> Self {
+        Task::new(Some(subject), None)
     }
 
     fn update(&mut self) {
