@@ -21,6 +21,11 @@ Version 0.1.0 is a Minimum Viable Product with a focus on data structures. It le
 
 Please be aware that the following roadmap is still Work in Progress and might be changed at any time.
 
+For release 0.5.0:
+
+* Allow definition of custom object types
+* Custom object types are based on Kodiak's units but also allow to add further attributes.
+
 For release 0.4.0:
 
 * Implement Data Persistence layer
