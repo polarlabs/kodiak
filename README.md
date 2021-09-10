@@ -62,7 +62,7 @@ As long as version numbers are < 1.0, Kodiak's development might be jumpy includ
 To create Kodiak, the following tools are in use:
 
 * [Rust Programming Language](https://www.rust-lang.org/)
-* [Crates from Rust Ecosystem](https://crates.io/): [actix](https://actix.rs), [clap](https://crates.io/crates/clap), [chrono](https://crates.io/crates/chrono), [serde](https://crates.io/crates/serde), [typetag](https://crates.io/crates/typetag) and [uuid](https://crates.io/crates/uuid)
+* [Crates from Rust Ecosystem](https://crates.io/): [actix](https://actix.rs), [clap](https://crates.io/crates/clap), [chrono](https://crates.io/crates/chrono), [reqwest](https://crates.io/crates/reqwest), [serde](https://crates.io/crates/serde), [tokio](https://crates.io/crates/tokio), [typetag](https://crates.io/crates/typetag) and [uuid](https://crates.io/crates/uuid)
 * [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/)
 * [Apostrophe](https://gitlab.gnome.org/World/apostrophe) for Markdown editing
 * [Github](https://github.com/) and [Github CLI](https://github.com/cli/cli)

@@ -3,26 +3,33 @@ name = "kodiak-server"
 version = "0.1.2"
 edition = "2018"
 
+[[bin]]
+name = "kodiak"
+path = "src/main.rs"
+
+[lib]
+name = "kodiak_interface"
+path = "src/lib.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 kodiak-core = { path = "../core" }
 
-# Actix web 3.x requires Actix rt 1.x
+# Actix web 3.x:
+# - comes with Tokio 0.2
+# - requires Actix rt 1.x
 actix-rt = "1.1.1"
 actix-web = "3.3.2"
 
-# Define command line usage in YAML format, used for two reasons:
+# Clap version string according to Clap compatibility policy
+# Reasons to define command line usage in YAML format:
 # 1. keeps source code clean
 # 2. supports multilingual command line
-# Clap version string according to Clap compatibility policy
 clap = { version = "~2.33.3", features = ["yaml"] }
 
-chrono = { version = "0.4.19", features = ["serde"] }
-
-serde = { version = "1.0.129", features = ["derive"] }
-serde_json = "1.0.67"
-
-typetag = "0.1.7"
-
-uuid = { version = "0.8.2", features = ["serde", "v4"] }
+[dev-dependencies]
+# Stick to reqwest 0.10 as reqwest 0.11.x requires tokio 1.x
+# which is incompatible with Actix web 3.x
+reqwest = "0.10.10"
+tokio = "0.2.5"
