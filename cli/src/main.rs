@@ -1,12 +1,7 @@
-use kodiak_core::io;
-use kodiak_core::unit;
+use kodiak_core::io::file::{read as file_read, write as file_write};
 use kodiak_core::{create, read, update, delete};
 
-use unit::UnitType;
-use unit::CRUD;
-
-use io::file::read as file_read;
-use io::file::write as file_write;
+use kodiak_core::unit::{Unit, UnitType};
 
 #[macro_use]
 extern crate clap;
@@ -24,7 +19,7 @@ fn main() {
         .get_matches();
     let debug = app_m.is_present("DEBUG");
 
-    let mut state: HashMap<String, Box<dyn CRUD>> = file_read("./kodiak.file");
+    let mut state: HashMap<String, Unit> = file_read("./kodiak.file");
 
     match app_m.subcommand() {
         ("create", Some(sub_m)) => {

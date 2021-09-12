@@ -1,7 +1,6 @@
 use chrono::{DateTime, Utc};
-use uuid::Uuid;
-
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Unit {

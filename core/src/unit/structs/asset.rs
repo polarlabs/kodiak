@@ -1,4 +1,4 @@
-use super::super::traits::crud::CRUD;
+use crate::CRUD;
 use super::_unit::Unit;
 
 use serde::{Deserialize, Serialize};
@@ -21,14 +21,14 @@ impl Asset {
     }
 }
 
-#[typetag::serde]
 impl CRUD for Asset {
     fn create(name: &str) -> Self {
         Asset::new(Some(name))
     }
 
-    fn update(&mut self) {
+    fn update(&mut self) -> &Self {
         self.unit.update();
+        self
     }
 
     fn key(&self) -> String {

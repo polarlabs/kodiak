@@ -1,9 +1,5 @@
-use kodiak_core::io;
-use io::file::read as file_read;
-use io::file::write as file_write;
-
-use kodiak_core::unit;
-use unit::CRUD;
+use kodiak_core::io::file::{read as file_read, write as file_write};
+use kodiak_core::unit::Unit;
 
 #[macro_use]
 extern crate clap;
@@ -23,7 +19,7 @@ async fn main() -> std::io::Result<()> {
         .get_matches();
     let _debug = app_m.is_present("DEBUG");
 
-    let state: HashMap<String, Box<dyn CRUD>> = file_read("./kodiak.file");
+    let state: HashMap<String, Unit> = file_read("./kodiak.file");
 
     let port = app_m.value_of("PORT").unwrap();
 

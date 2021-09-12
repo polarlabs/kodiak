@@ -1,4 +1,4 @@
-use crate::unit::CRUD;
+use crate::Unit;
 
 use serde_json::{json, Map, Value};
 
@@ -6,7 +6,8 @@ use std::collections::HashMap;
 use std::fs;
 use std::io::{Read, Write};
 
-pub fn read(file_name: &str) -> HashMap<String, Box<dyn CRUD>> {
+
+pub fn read(file_name: &str) -> HashMap<String, Unit> {
     // Open existing or create new file and handle involved errors
     let mut file = match fs::OpenOptions::new().create(true).read(true).write(true).open(file_name) {
         Ok(file) => file,
@@ -52,7 +53,7 @@ pub fn read(file_name: &str) -> HashMap<String, Box<dyn CRUD>> {
 /// 1. Human readable JSON format with indentation and newlines.
 /// 2. Trailing newline to improve readability in terminal.
 ///
-pub fn write(file_name: &str, state: &HashMap<String, Box<dyn CRUD>>) {
+pub fn write(file_name: &str, state: &HashMap<String, Unit>) {
     let lock = "kodiak.lock";
 
     // Create lock, fail if lock already exists.

@@ -1,4 +1,4 @@
-use super::super::CRUD;
+use crate::CRUD;
 use super::_unit::Unit;
 
 use serde::{Deserialize, Serialize};
@@ -26,14 +26,14 @@ impl Task {
     }
 }
 
-#[typetag::serde]
 impl CRUD for Task {
     fn create(subject: &str) -> Self {
         Task::new(Some(subject), None)
     }
 
-    fn update(&mut self) {
+    fn update(&mut self) -> &Self {
         self.unit.update();
+        self
     }
 
     fn key(&self) -> String {
