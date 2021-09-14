@@ -1,4 +1,5 @@
 pub mod views;
+mod rest;
 
 use actix_web::{web, App, HttpRequest, HttpServer, HttpResponse};
 use actix_web::dev::Server;
@@ -21,6 +22,7 @@ pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
     let server = HttpServer::new(|| {
         App::new()
             .configure(views::factory)
+            .configure(rest::api::factory)
             .route("/health", web::get().to(health))
             .route("/{name}", web::get().to(greet))
             .route("/", web::get().to(greet))

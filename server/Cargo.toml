@@ -28,6 +28,9 @@ actix-web = "3.3.2"
 # 2. supports multilingual command line
 clap = { version = "~2.33.3", features = ["yaml"] }
 
+serde = { version = "1.0.129", features = ["derive"] }
+serde_json = "1.0.67"
+
 [dev-dependencies]
 # Stick to reqwest 0.10 as reqwest 0.11.x requires tokio 1.x
 # which is incompatible with Actix web 3.x

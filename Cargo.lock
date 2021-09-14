@@ -1060,6 +1060,8 @@ dependencies = [
  "clap",
  "kodiak-core",
  "reqwest",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
