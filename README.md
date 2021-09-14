@@ -34,6 +34,8 @@ For release 0.4.0:
 For release 0.3.0:
 
 * Implement a simple Web Frontend delivered by Kodiak's web server
+* Refine data structures to leverage best practices from Domain Driven Design and Functional Programming 
+* Evaluate usage of [Refinement](https://crates.io/crates/refinement) in Frontend and Backend
  
 For release 0.2.0:
 
@@ -63,3 +65,7 @@ I've found some very good articles regarding Traits and Trait objects.
 
 * [Rust traits: A deep dive by LogRocket](https://blog.logrocket.com/rust-traits-a-deep-dive/)
 * [dyn Trait and impl Trait in Rust by Nick Cameron](https://www.ncameron.org/blog/dyn-trait-and-impl-trait-in-rust/)
+
+Meanwhile I've discovered a great talk on leveraging Domain Driven Design and Functional Programming.
+
+* [Talk Session: Domain Modeling Made Functional by Scott Wlaschin](https://www.youtube.com/watch?v=PLFl95c-IiU)
