@@ -3,51 +3,42 @@ use serde::{Serialize, Deserialize};
 use serde_json::json;
 
 use kodiak_core::unit::{CRUD, Asset, Unit};
-
-use kodiak_core::io::file::read as file_read;
-use kodiak_core::io::file::write as file_write;
+use kodiak_core::io::file::{write as file_write};
 use super::Key;
 
-use std::collections::HashMap;
+use crate::AppState;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AssetName {
     name: String,
 }
 
-pub async fn create(web::Query(asset): web::Query<AssetName>) -> HttpResponse {
+pub async fn create(state: web::Data<AppState>, web::Query(asset): web::Query<AssetName>) -> HttpResponse {
+    let mut data = state.data.lock().unwrap();
     let asset = Asset::create(asset.name.as_str());
+
+    println!("POST: key {}", asset.key());
 
     let body = json!(&asset);
 
-    let mut state: HashMap<String, Unit> = file_read("./kodiak.file");
-    state.insert(asset.key(), Unit::Asset(asset));
+    data.insert(asset.key(), Unit::Asset(asset));
 
-    file_write("./kodiak.file", &state);
+    file_write("./kodiak.file", &data);
 
     HttpResponse::Ok()
         .body(body)
 }
 
-pub async fn read(web::Query(unit): web::Query<Key>) -> HttpResponse {
+pub async fn read(state: web::Data<AppState>, web::Query(unit): web::Query<Key>) -> HttpResponse {
+    let data = state.data.lock().unwrap();
 
-    let state: HashMap<String, Unit> = file_read("./kodiak.file");
-    println!("Key: {:?}", state);
+    println!("GET: key {}", unit.key.as_str());
 
-    if state.contains_key(unit.key.as_str()) {
-        println!("Test");
-        let unit = state.get(unit.key.as_str()).unwrap();
+    if data.contains_key(unit.key.as_str()) {
+        let unit = data.get(unit.key.as_str()).unwrap();
+
         HttpResponse::Ok()
             .body(json!(unit))
-        /*
-        match <dyn Any>::downcast_ref::<Asset>(unit) {
-            Some(asset) => {
-                HttpResponse::Ok()
-                    .body(json!(asset))
-            },
-            None => HttpResponse::NotFound().finish(),
-        }
-        */
     }
     else {
         HttpResponse::NotFound().finish()
@@ -55,21 +46,20 @@ pub async fn read(web::Query(unit): web::Query<Key>) -> HttpResponse {
 }
 
 // Do not forget to set Content-Type: application/json when requesting
-pub async fn update(asset: web::Json<Asset>) -> HttpResponse {
-
-    let mut state: HashMap<String, Unit> = file_read("./kodiak.file");
+pub async fn update(state: web::Data<AppState>, asset: web::Json<Asset>) -> HttpResponse {
+    let mut data = state.data.lock().unwrap();
 
     println!("PUT");
 
-    if state.contains_key(asset.key().as_str()) {
-        let unit = state.get_mut(asset.key().as_str()).unwrap();
+    if data.contains_key(asset.key().as_str()) {
+        let unit = data.get_mut(asset.key().as_str()).unwrap();
         match unit {
             Unit::Asset(asset) => { asset.update();}
             _ => {}
         }
-
         let body = json!(&unit);
-        file_write("./kodiak.file", &state);
+
+        file_write("./kodiak.file", &data);
 
         HttpResponse::Ok()
             .body(body)
@@ -79,17 +69,18 @@ pub async fn update(asset: web::Json<Asset>) -> HttpResponse {
     }
 }
 
-pub async fn delete(web::Query(unit): web::Query<Key>) -> HttpResponse {
-
-    let mut state: HashMap<String, Unit> = file_read("./kodiak.file");
+pub async fn delete(state: web::Data<AppState>, web::Query(unit): web::Query<Key>) -> HttpResponse {
+    let mut data = state.data.lock().unwrap();
 
     println!("DELETE");
-    if state.contains_key(unit.key.as_str()) {
-        let asset = state.get(unit.key.as_str()).unwrap();
+
+    if data.contains_key(unit.key.as_str()) {
+        let asset = data.get(unit.key.as_str()).unwrap();
         let body = json!(&asset);
 
-        state.remove(unit.key.as_str());
-        file_write("./kodiak.file", &state);
+        data.remove(unit.key.as_str());
+
+        file_write("./kodiak.file", &data);
 
         HttpResponse::Ok()
             .body(body)
