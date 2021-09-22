@@ -13,7 +13,7 @@ pub struct Key {
 }
 
 pub fn factory(app: &mut web::ServiceConfig) {
-    let base = Path::new("/rest/api");
+    let base = Path::new("/rest/api/v1");
 
     app
         .route(&base.sub("/assets"), web::post().to(assets::create) )
