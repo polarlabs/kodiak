@@ -3,7 +3,7 @@ use super::_unit::Unit;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Task {
     subject: Option<String>,
     status: Option<String>,
