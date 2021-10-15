@@ -8,6 +8,7 @@ use crate::AppState;
 use kodiak_core::unit::UnitType;
 use kodiak_core::unit::{CRUD, Asset, Task, User, Unit};
 use kodiak_core::io::file::{write as file_write};
+use std::ops::DerefMut;
 
 mod assets;
 mod tasks;
@@ -30,9 +31,7 @@ pub fn factory(app: &mut web::ServiceConfig) {
         .route(&base.sub("/{unittype}"), web::post().to(create) )
         .route(&base.sub("/{unittype}"), web::get().to(read) )
         .route(&base.sub("/{unittype}"), web::delete().to(delete) )
-        .route(&base.sub("/assets"), web::put().to(assets::update) )
-        .route(&base.sub("/tasks"), web::put().to(tasks::update) )
-        .route(&base.sub("/users"), web::put().to(users::update) );
+        .route(&base.sub("/{unittype}"), web::put().to(update) );
 }
 
 fn create(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Query<Name>) -> HttpResponse {
@@ -46,38 +45,35 @@ fn create(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Q
         &_ => { None }
     };
 
-    let (key, body) = match unittype {
+    let resp = match unittype {
         Some(UnitType::Asset) => {
             let unit = Asset::create(unit.name.as_str());
-            let k = unit.key();
-            let v = json!(&unit);
+            let body = json!(Unit::Asset(unit.clone()));
             data.insert(unit.key(), Unit::Asset(unit));
-            (k, v)
+            HttpResponse::Ok()
+                .body(body)
         }
         Some(UnitType::Task) => {
             let unit = Task::create(unit.name.as_str());
-            let k = unit.key();
-            let v = json!(&unit);
+            let body = json!(Unit::Task(unit.clone()));
             data.insert(unit.key(), Unit::Task(unit));
-            (k, v)
+            HttpResponse::Ok()
+                .body(body)
         },
         Some(UnitType::User) => {
             let unit = User::create(unit.name.as_str());
-            let k = unit.key();
-            let v = json!(&unit);
+            let body = json!(Unit::User(unit.clone()));
             data.insert(unit.key(), Unit::User(unit));
-            (k, v)
+            HttpResponse::Ok()
+                .body(body)
         }
         // todo: error handling
-        None => ("".to_string(), json!(""))
+        None => HttpResponse::NotFound().finish()
     };
 
     file_write("./kodiak.file", &data);
 
-    println!("POST: key {}", key);
-
-    HttpResponse::Ok()
-        .body(body)
+    resp
 }
 
 fn read(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Query<Key>) -> HttpResponse {
@@ -94,15 +90,15 @@ fn read(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Que
 
     let unit = get_unit_by_unittype(&state, unittype.unwrap(), unit.key.as_str());
     match unit {
-        Some(Unit::Asset(unit)) => {
+        Some(Unit::Asset(_)) => {
             HttpResponse::Ok()
                 .body(json!(unit))
         }
-        Some(Unit::Task(unit)) => {
+        Some(Unit::Task(_)) => {
             HttpResponse::Ok()
                 .body(json!(unit))
         }
-        Some(Unit::User(unit)) => {
+        Some(Unit::User(_)) => {
             HttpResponse::Ok()
                 .body(json!(unit))
         }
@@ -133,6 +129,28 @@ fn get_unit_by_unittype(state: &web::Data<AppState>, unittype: UnitType, key: &s
         }
         None => { None }
     }
+}
+
+// Do not forget to set Content-Type: application/json when requesting
+pub fn update(state: web::Data<AppState>, unit: web::Json<Unit>) -> HttpResponse {
+    let mut data = state.data.lock().unwrap();
+    let state = data.deref_mut();
+
+    println!("PUT");
+
+    let resp = match unit.into_inner() {
+        Unit::Asset(asset) => {
+            assets::update(state, asset)
+        }
+        Unit::Task(task) => {
+            tasks::update(state, task)
+        }
+        Unit::User(user) => {
+            users::update(state, user)
+        }
+    };
+
+    resp
 }
 
 fn delete(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Query<Key>) -> HttpResponse {
