@@ -1,5 +1,7 @@
+mod create;
+use crate::create::{create, read, update, delete};
+
 use kodiak_core::io::file::{read as file_read, write as file_write};
-use kodiak_core::{create, read, update, delete};
 
 use kodiak_core::unit::{Unit, UnitType};
 
@@ -9,7 +11,8 @@ use clap::App;
 
 use std::collections::HashMap;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // Load clap YAML file
     let yaml = load_yaml!("cli.yml");
     let app_m = App::from(yaml)
@@ -19,18 +22,18 @@ fn main() {
         .get_matches();
     let debug = app_m.is_present("DEBUG");
 
-    let mut state: HashMap<String, Unit> = file_read("./kodiak.file");
-
     match app_m.subcommand() {
         ("create", Some(sub_m)) => {
             let name = sub_m.value_of("NAME").unwrap().to_owned();
+            // todo: deserialization of UnitType
             let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
                 "asset" => UnitType::Asset,
                 "task" => UnitType::Task,
                 "user" => UnitType::User,
                 _ => { unreachable!() }
             };
-            let u = create(&mut state, unit_type, name.as_str());
+            let client = reqwest::Client::new();
+            let u = create(client, unit_type, name.as_str()).await;
 
             if debug {
                 println!("Debug: unit created {:?}", u);
@@ -38,33 +41,54 @@ fn main() {
         }
         ("read", Some(sub_m)) => {
             let key = sub_m.value_of("KEY").unwrap().to_owned();
-            let u = read(&mut state, key.as_str());
-
-            println!("Unit key: {:?}", u);
+            // todo: deserialization of UnitType
+            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
+                "asset" => UnitType::Asset,
+                "task" => UnitType::Task,
+                "user" => UnitType::User,
+                _ => { unreachable!() }
+            };
+            let client = reqwest::Client::new();
+            let u = read(client, unit_type, key.as_str()).await;
 
             if debug {
-                println!("Debug: units in database {:?}", state);
+                println!("Debug: unit read {:?}", u);
             }
         }
         ("update", Some(sub_m)) => {
             let key = sub_m.value_of("KEY").unwrap().to_owned();
-            let u = read(&mut state, key.as_str()).unwrap();
+            // todo: deserialization of UnitType
+            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
+                "asset" => UnitType::Asset,
+                "task" => UnitType::Task,
+                "user" => UnitType::User,
+                _ => { unreachable!() }
+            };
+            let client = reqwest::Client::new();
+            let u = update(client, unit_type, key.as_str()).await;
 
-            println!("Unit before update: {:?}", u);
-            let u = update(&mut state, key.as_str());
-            println!("Unit after update: {:?}", u);
+            if debug {
+                println!("Debug: unit updated {:?}", u);
+            }
         }
         ("delete", Some(sub_m)) => {
             let key = sub_m.value_of("KEY").unwrap().to_owned();
-            match delete(&mut state, key.as_str()) {
-                Some(_unit) => println!("Unit {} deleted.", key),
-                None => println!("Unit {} not found.", key),
+            // todo: deserialization of UnitType
+            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
+                "asset" => UnitType::Asset,
+                "task" => UnitType::Task,
+                "user" => UnitType::User,
+                _ => { unreachable!() }
+            };
+            let client = reqwest::Client::new();
+            let u = delete(client, unit_type, key.as_str()).await;
+
+            if debug {
+                println!("Debug: unit deleted {:?}", u);
             }
         }
         _ => {
             unreachable!()
         }
     }
-
-    file_write("./kodiak.file", &state);
 }

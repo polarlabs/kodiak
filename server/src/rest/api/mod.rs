@@ -29,8 +29,8 @@ pub fn factory(app: &mut web::ServiceConfig) {
     app
         .route(&base.sub("/{unittype}"), web::post().to(create) )
         .route(&base.sub("/{unittype}"), web::get().to(read) )
-        .route(&base.sub("/{unittype}"), web::delete().to(delete) )
-        .route(&base.sub("/{unittype}"), web::put().to(update) );
+        .route(&base.sub("/{unittype}"), web::put().to(update) )
+        .route(&base.sub("/{unittype}"), web::delete().to(delete) );
 }
 
 fn create(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Query<Name>) -> HttpResponse {
@@ -45,6 +45,7 @@ fn create(state: web::Data<AppState>, req: HttpRequest, web::Query(unit): web::Q
         &_ => { None }
     };
 
+    // todo: unwraping unittype
     let resp = match kodiak_core::create(state, unittype.unwrap(), unit.name.as_str()) {
         Some(unit) => {
             HttpResponse::Ok().body(json!(&unit))
