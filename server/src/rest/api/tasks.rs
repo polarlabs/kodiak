@@ -17,6 +17,7 @@ pub fn update(state: &mut HashMap<String, Unit>, task: Task) -> HttpResponse {
             file_write("./kodiak.file", &state);
 
             HttpResponse::Ok()
+                .content_type("application/json")
                 .body(body)
 
         }

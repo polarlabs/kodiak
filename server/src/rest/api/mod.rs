@@ -81,7 +81,9 @@ fn create_user(state: web::Data<AppState>, web::Query(unit): web::Query<UserQ>, 
 fn create(state: &mut HashMap<String, Unit>, unittype: UnitType, name: &str) -> HttpResponse {
     let resp = match kodiak_core::create(state, unittype, name) {
         Some(unit) => {
-            HttpResponse::Ok().body(json!(&unit))
+            HttpResponse::Ok()
+                .content_type("application/json")
+                .body(json!(&unit))
         },
         None => HttpResponse::NotFound().finish(),
     };
@@ -96,6 +98,7 @@ fn read(state: web::Data<AppState>, web::Path(unittype): web::Path<UnitType>, _r
     println!("GET: unittype {:?}", unittype);
 
     let resp = HttpResponse::Ok()
+        .content_type("application/json")
         .body(json!(kodiak_core::read(&state, unittype)));
 
     resp
@@ -110,6 +113,7 @@ fn read_by_key(state: web::Data<AppState>, web::Path((unittype, key)): web::Path
     let resp = match kodiak_core::read_by_key(&state, unittype, key.as_str()) {
         Some(unit) => {
             HttpResponse::Ok()
+                .content_type("application/json")
                 .body(json!(unit))
         }
         // todo: error handling
@@ -156,6 +160,7 @@ fn delete_by_key(state: web::Data<AppState>, web::Path((unittype, key)): web::Pa
             file_write("./kodiak.file", &data);
 
             HttpResponse::Ok()
+                .content_type("application/json")
                 .body(body)
         }
         None => {
