@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 pub struct Task {
     subject: Option<String>,
     status: Option<String>,
+
+    #[serde(flatten)]
     unit: Unit,
 }
 

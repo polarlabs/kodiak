@@ -6,6 +6,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Asset {
     name: Option<String>,
+
+    #[serde(flatten)]
     unit: Unit,
 }
 
