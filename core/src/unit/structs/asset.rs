@@ -1,11 +1,13 @@
-use super::super::traits::crud::CRUD;
+use crate::CRUD;
 use super::_unit::Unit;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Asset {
     name: Option<String>,
+
+    #[serde(flatten)]
     unit: Unit,
 }
 
@@ -21,14 +23,14 @@ impl Asset {
     }
 }
 
-#[typetag::serde]
 impl CRUD for Asset {
     fn create(name: &str) -> Self {
         Asset::new(Some(name))
     }
 
-    fn update(&mut self) {
+    fn update(&mut self) -> &Self {
         self.unit.update();
+        self
     }
 
     fn key(&self) -> String {

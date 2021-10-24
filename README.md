@@ -1,5 +1,21 @@
 Kodiak is a tool to manage any arbitrary item, such as assets, task and users. It is implemented in Rust. The project is in its early stages with a roadmap to version 1.0 still work in progress.
 
+# Version 0.2.0
+
+Version 0.2.0 introduces a minimalistic REST API which allows to manage items. Kodiak's command line interface uses this REST API to communicate with the server.
+
+## Release Notes
+
+1. Manage (create, read, update, delete) Assets, Tasks and Users via REST API.
+2. User interface: any web client able to build HTTP requests of the required HTTP methods GET, POST, PUT and DELETE, e.g. [curl](https://curl.se/) or Advanced REST Client [ARC](https://docs.advancedrestclient.com/).
+
+## Known Issues
+
+1. Test coverage: not existent.
+2. Other todos are documented with ```// todo:``` in the code base.
+3. License terms: tbd.
+4. Documentation of REST API: missing.
+
 # Version 0.1.0
 
 Version 0.1.0 is a Minimum Viable Product with a focus on data structures. It leverages trait objects to implement a generic interface which keeps the code base flexible for future development.
@@ -53,7 +69,7 @@ As long as version numbers are < 1.0, Kodiak's development might be jumpy includ
 To create Kodiak, the following tools are in use:
 
 * [Rust Programming Language](https://www.rust-lang.org/)
-* [Crates from Rust Ecosystem](https://crates.io/): [clap](https://crates.io/crates/clap), [chrono](https://crates.io/crates/chrono), [serde](https://crates.io/crates/serde), [typetag](https://crates.io/crates/typetag) and [uuid](https://crates.io/crates/uuid)
+* [Crates from Rust Ecosystem](https://crates.io/): [actix](https://actix.rs), [clap](https://crates.io/crates/clap), [chrono](https://crates.io/crates/chrono), [reqwest](https://crates.io/crates/reqwest), [serde](https://crates.io/crates/serde), [tokio](https://crates.io/crates/tokio), [typetag](https://crates.io/crates/typetag) and [uuid](https://crates.io/crates/uuid)
 * [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/)
 * [Apostrophe](https://gitlab.gnome.org/World/apostrophe) for Markdown editing
 * [Github](https://github.com/) and [Github CLI](https://github.com/cli/cli)

@@ -1,11 +1,13 @@
-use super::super::traits::crud::CRUD;
+use crate::CRUD;
 use super::_unit::Unit;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct User {
     email: Option<String>,
+
+    #[serde(flatten)]
     unit: Unit,
 }
 
@@ -21,14 +23,14 @@ impl User {
     }
 }
 
-#[typetag::serde]
 impl CRUD for User {
     fn create(email: &str) -> Self {
         User::new(Some(email))
     }
 
-    fn update(&mut self) {
+    fn update(&mut self) -> &Self {
         self.unit.update();
+        self
     }
 
     fn key(&self) -> String {
