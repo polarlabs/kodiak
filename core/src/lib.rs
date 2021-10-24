@@ -8,6 +8,9 @@ use std::collections::HashMap;
 pub fn create(state: &mut HashMap<String, Unit>, unit_type: UnitType, name: &str) -> Option<Unit> {
 
     match unit_type {
+        UnitType::Unit => {
+            None
+        }
         UnitType::Asset => {
             let unit = Asset::create(name);
             let key = unit.key();
@@ -29,27 +32,50 @@ pub fn create(state: &mut HashMap<String, Unit>, unit_type: UnitType, name: &str
     }
 }
 
-pub fn read<'a>(state: &'a HashMap<String, Unit>, key: &str) -> Option<&'a Unit> {
-    state.get(key)
+//
+// Returns a unit of defined type
+// If unittype is Unit, a Unit of any type might be returned
+//
+pub fn read<'a>(state: &'a HashMap<String, Unit>, unittype: UnitType) -> Vec<&'a Unit> {
+
+    match unittype {
+        UnitType::Unit => {
+            state.values().collect::<Vec<&Unit>>()
+        }
+        _ => {
+            state.values().filter(|unit| unit.is_a(&unittype)).collect::<Vec<&Unit>>()
+        }
+    }
 }
 
-pub fn read_by_unittype<'a>(state: &'a HashMap<String, Unit>, unittype: UnitType, key: &str) -> Option<&'a Unit> {
+//
+// Returns a unit of defined type
+// If unittype is Unit, a Unit of any type might be returned
+//
+pub fn read_by_key<'a>(state: &'a HashMap<String, Unit>, unittype: UnitType, key: &str) -> Option<&'a Unit> {
 
-    match state.get(key) {
-        Some(unit) => {
-            match unit {
-                Unit::Asset(_) => {
-                    if unittype == UnitType::Asset { Some(unit) } else { None }
+    match unittype {
+        UnitType::Unit => {
+            state.get(key)
+        }
+        _ => {
+            match state.get(key) {
+                Some(unit) => {
+                    match unit {
+                        Unit::Asset(_) => {
+                            if unittype == UnitType::Asset { Some(unit) } else { None }
+                        }
+                        Unit::Task(_) => {
+                            if unittype == UnitType::Task { Some(unit) } else { None }
+                        }
+                        Unit::User(_) => {
+                            if unittype == UnitType::User { Some(unit) } else { None }
+                        }
+                    }
                 }
-                Unit::Task(_) => {
-                    if unittype == UnitType::Task { Some(unit) } else { None }
-                }
-                Unit::User(_) => {
-                    if unittype == UnitType::User { Some(unit) } else { None }
-                }
+                None => { None }
             }
         }
-        None => { None }
     }
 }
 

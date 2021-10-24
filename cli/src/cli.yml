@@ -48,12 +48,12 @@ subcommands:
             takes_value: true
             help: Reads unit with specified key from database.
             multiple: false
-            required: true
+            required: false
         - UNIT_TYPE:
             long: unittype
             short: t
             takes_value: true
-            possible_values: ["asset", "task", "user"]
+            possible_values: ["unit", "asset", "task", "user"]
             help: Defines the type of the unit.
             multiple: false
             required: true
@@ -76,6 +76,13 @@ subcommands:
             takes_value: true
             possible_values: ["asset", "task", "user"]
             help: Defines the type of the unit.
+            multiple: false
+            required: true
+        - PAYLOAD:
+            long: payload
+            short: p
+            takes_value: true
+            help: Payload in JSON format.
             multiple: false
             required: true
   - delete:

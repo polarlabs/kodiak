@@ -1,15 +1,13 @@
-mod create;
-use crate::create::{create, read, update, delete};
+mod crud;
 
-use kodiak_core::io::file::{read as file_read, write as file_write};
+use std::str::FromStr;
+use crate::crud::{create, read, update, delete, read_by_key};
 
-use kodiak_core::unit::{Unit, UnitType};
+use kodiak_core::unit::UnitType;
 
 #[macro_use]
 extern crate clap;
 use clap::App;
-
-use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() {
@@ -25,13 +23,7 @@ async fn main() {
     match app_m.subcommand() {
         ("create", Some(sub_m)) => {
             let name = sub_m.value_of("NAME").unwrap().to_owned();
-            // todo: deserialization of UnitType
-            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
-                "asset" => UnitType::Asset,
-                "task" => UnitType::Task,
-                "user" => UnitType::User,
-                _ => { unreachable!() }
-            };
+            let unit_type = UnitType::from_str(sub_m.value_of("UNIT_TYPE").unwrap()).unwrap();
             let client = reqwest::Client::new();
             let u = create(client, unit_type, name.as_str()).await;
 
@@ -40,32 +32,31 @@ async fn main() {
             }
         }
         ("read", Some(sub_m)) => {
-            let key = sub_m.value_of("KEY").unwrap().to_owned();
-            // todo: deserialization of UnitType
-            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
-                "asset" => UnitType::Asset,
-                "task" => UnitType::Task,
-                "user" => UnitType::User,
-                _ => { unreachable!() }
-            };
+            let unit_type = UnitType::from_str(sub_m.value_of("UNIT_TYPE").unwrap()).unwrap();
             let client = reqwest::Client::new();
-            let u = read(client, unit_type, key.as_str()).await;
 
-            if debug {
-                println!("Debug: unit read {:?}", u);
+            if let Some(key) = sub_m.value_of("KEY") {
+                let u = read_by_key(client, unit_type, key).await;
+
+                if debug {
+                    println!("Debug: unit read {:?}", u);
+                }
+
+            }
+            else {
+                let u = read(client, unit_type).await;
+
+                if debug {
+                    println!("Debug: units read {:?}", u);
+                }
             }
         }
         ("update", Some(sub_m)) => {
             let key = sub_m.value_of("KEY").unwrap().to_owned();
-            // todo: deserialization of UnitType
-            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
-                "asset" => UnitType::Asset,
-                "task" => UnitType::Task,
-                "user" => UnitType::User,
-                _ => { unreachable!() }
-            };
+            let unit_type = UnitType::from_str(sub_m.value_of("UNIT_TYPE").unwrap()).unwrap();
+            let payload = sub_m.value_of("PAYLOAD").unwrap();
             let client = reqwest::Client::new();
-            let u = update(client, unit_type, key.as_str()).await;
+            let u = update(client, unit_type, key.as_str(), payload).await;
 
             if debug {
                 println!("Debug: unit updated {:?}", u);
@@ -73,13 +64,7 @@ async fn main() {
         }
         ("delete", Some(sub_m)) => {
             let key = sub_m.value_of("KEY").unwrap().to_owned();
-            // todo: deserialization of UnitType
-            let unit_type = match sub_m.value_of("UNIT_TYPE").unwrap() {
-                "asset" => UnitType::Asset,
-                "task" => UnitType::Task,
-                "user" => UnitType::User,
-                _ => { unreachable!() }
-            };
+            let unit_type = UnitType::from_str(sub_m.value_of("UNIT_TYPE").unwrap()).unwrap();
             let client = reqwest::Client::new();
             let u = delete(client, unit_type, key.as_str()).await;
 
