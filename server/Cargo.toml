@@ -20,6 +20,7 @@ kodiak-core = { path = "../core" }
 # - comes with Tokio 0.2
 # - requires Actix rt 1.x
 actix-rt = "1.1.1"
+actix-files = "0.5.0"
 actix-web = "3.3.2"
 
 # Clap version string according to Clap compatibility policy

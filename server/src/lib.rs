@@ -4,6 +4,7 @@ mod rest;
 use kodiak_core::unit::Unit;
 use kodiak_core::io::file::{read as file_read};
 
+use actix_files as fs;
 use actix_web::{web, App, HttpRequest, HttpServer, HttpResponse};
 use actix_web::dev::Server;
 
@@ -41,8 +42,7 @@ pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
             .configure(views::factory)
             .configure(rest::api::factory)
             .route("/health", web::get().to(health))
-            .route("/{name}", web::get().to(greet))
-            .route("/", web::get().to(greet))
+            .service(fs::Files::new("/static", "./web").show_files_listing())
     })
         .listen(listener)?
         .run();
